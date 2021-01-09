@@ -11,6 +11,7 @@ class LangEs extends LangString
         $this->traduction = [
             self::UPLOAD_ERROR => "Error al subir el fichero",
             self::MIME_TYPE => "Tipo de fichero no válido",
+            self::PATH_NOT_EXIST => "La ruta no existe",
         ];
     }
 

@@ -76,7 +76,7 @@ class File implements FileType
      *
      * @return FileType
      */
-    public function validateType(array $typeList = ['application/pdf']): FileType
+    public function validateType(array $typeList = ['application/pdf']): self
     {
         $valid = false;
         foreach ($typeList as $type) {
@@ -86,7 +86,6 @@ class File implements FileType
         if (!$valid) {
             throw new InvalidArgumentException($this->lang->write($this->lang::MIME_TYPE));
         }
-
         return $this;
     }
 
@@ -141,6 +140,16 @@ class File implements FileType
     }
 
     /**
+     * Get language Strings class
+     *
+     * @return  LangString
+     */
+    public function getLang(): LangString
+    {
+        return $this->lang;
+    }
+
+    /**
      * Get file data in array format
      *
      * @return array
@@ -149,8 +158,9 @@ class File implements FileType
     {
         return [
             'name' => $this->name,
-            'mimetype' => $this->mime,
+            'type' => $this->type,
             'size' => $this->size,
+            'tmp_name' => $this->tmp_name,
         ];
     }
 

@@ -15,4 +15,6 @@ interface FileType
 
     public function toJson(): string;
 
+    public function getLang(): LangString;
+
 }

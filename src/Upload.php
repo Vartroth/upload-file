@@ -25,6 +25,6 @@ class Upload
 
     public function save(): FileType
     {
-        return $result = $this->storageSystem->process($this->file, $this->path);
+        return $this->storageSystem->process($this->file, $this->path);
     }
 }
