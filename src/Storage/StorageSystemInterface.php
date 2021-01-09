@@ -8,5 +8,7 @@ use Vartroth\UploadFile\Entity\FileType;
 
 interface StorageSystemInterface
 {
-    public function process(FileType $file, string $path): FileType;
+    public function __construct(string $path);
+
+    public function process(FileType $file): FileType;
 }

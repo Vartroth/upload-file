@@ -11,20 +11,17 @@ class Upload
 {
     private $file;
     private $storageSystem;
-    private $path;
 
     public function __construct(
-        FileType $uploadedfile,
-        StorageSystemInterface $storageSystem,
-        string $path
+        FileType $filetype,
+        StorageSystemInterface $storageSystem
     ) {
-        $this->file = $uploadedfile;
+        $this->file = $filetype;
         $this->storageSystem = $storageSystem;
-        $this->path = $path;
     }
 
     public function save(): FileType
     {
-        return $this->storageSystem->process($this->file, $this->path);
+        return $this->storageSystem->process($this->file);
     }
 }

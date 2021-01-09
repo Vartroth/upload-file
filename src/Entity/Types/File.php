@@ -90,6 +90,18 @@ class File implements FileType
     }
 
     /**
+     * Set file name
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Get the file name
      *
      * @return  string
@@ -117,26 +129,6 @@ class File implements FileType
     public function getSize()
     {
         return $this->size;
-    }
-
-    /**
-     * Get upload file error
-     *
-     * @return  bool
-     */
-    public function getError()
-    {
-        return $this->error;
-    }
-
-    /**
-     * Get error Message
-     *
-     * @return  string
-     */
-    public function getErrorMessage()
-    {
-        return $this->errorMessage;
     }
 
     /**

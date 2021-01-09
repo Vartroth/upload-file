@@ -17,4 +17,6 @@ interface FileType
 
     public function getLang(): LangString;
 
+    public function setName(string $name);
+
 }
