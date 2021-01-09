@@ -1,0 +1,31 @@
+{
+    "name": "vartroth/upload-file",
+    "description": "Upload File",
+    "type": "library",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrián González",
+            "email": "info.agonzalez@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vartroth\\UploadFile\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vartroth\\UploadFile\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.1.0",
+        "vartroth/functions-utils": "^1.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "server": "php -S 127.0.0.1:8080"
+    }
+}

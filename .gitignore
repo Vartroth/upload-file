@@ -1,0 +1,7 @@
+.idea/
+.vsconfig/
+/vendor/
+/build/
+composer.lock
+index.php
+phpunit.xml
