@@ -4,11 +4,13 @@ declare (strict_types = 1);
 
 namespace Vartroth\UploadFile\Storage;
 
+use Vartroth\UploadFile\Entity\FileType;
+
 class LocalFileSystem implements StorageSystemInterface
 {
 
-    public function process(UploadedFileType $file, string $path = __DIR__ . "../../"): File
+    public function process(FileType $file, string $path = __DIR__ . "../../"): FileType
     {
-        return false;
+        return $file;
     }
 }

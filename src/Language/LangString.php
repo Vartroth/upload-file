@@ -9,7 +9,9 @@ abstract class LangString
     public const UPLOAD_ERROR = "error";
     public const MIME_TYPE = "type";
 
-    private $traduction = [];
+    protected $traduction = "";
+
+    abstract public function __construct();
 
     public function write($key): string
     {

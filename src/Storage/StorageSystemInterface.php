@@ -4,10 +4,9 @@ declare (strict_types = 1);
 
 namespace Vartroth\UploadFile\Storage;
 
-use Vartroth\UploadFile\Entity\File;
-use Vartroth\UploadFile\Entity\UploadedFileType;
+use Vartroth\UploadFile\Entity\FileType;
 
 interface StorageSystemInterface
 {
-    public function process(UploadedFileType $file, string $path): File;
+    public function process(FileType $file, string $path): FileType;
 }
