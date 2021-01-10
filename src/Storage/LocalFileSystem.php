@@ -21,24 +21,26 @@ class LocalFileSystem implements StorageSystemInterface
      */
     public function __construct(string $path = __DIR__ . "../../")
     {
+        if (!is_dir($path)) {
+            throw new InvalidArgumentException();
+        }
         $this->path = $path;
     }
 
     public function process(FileType $file): FileType
     {
 
-        $file->setName(SanitizerStringFile::exec((string) $file->toArray()['name']));
+        $ext = \explode('.', $file->getName());
+        $file_name = str_replace("." . $ext[(sizeof($ext) - 1)], "", $file->getName());
 
-        if (!is_dir($this->path)) {
-            throw new InvalidArgumentException($file->getLang()->write($file->getLang()::PATH_NOT_EXIST));
-        }
+        $file->setName(SanitizerStringFile::exec($file_name) . "." . $ext[(sizeof($ext) - 1)]);
 
-        move_uploaded_file(
+        @move_uploaded_file(
             (string) $file->toArray()['tmp_name'],
-            $this->path . (string) $file->toArray()['name']
+            $this->path . (string) $file->getName()
         );
 
-        if (!is_file($this->path . (string) $file->toArray()['name'])) {
+        if (!is_file($this->path . (string) $file->getName())) {
             throw new UploadFileException($file->getLang()->write($file->getLang()::UPLOAD_ERROR));
         }
 

@@ -57,7 +57,11 @@ class File implements FileType
     {
         $this->lang = $lang;
 
-        if (!isset($FileData) || $FileData['error'] || !is_file($FileData['tmp_name'])) {
+        if (!isset($FileData) || !isset($FileData['error'])) {
+            throw new InvalidArgumentException($this->lang->write($this->lang::UPLOAD_ERROR));
+        }
+
+        if ($FileData['error'] || !is_file($FileData['tmp_name'])) {
             throw new UploadFileException($this->lang->write($this->lang::UPLOAD_ERROR));
         }
 
@@ -84,7 +88,7 @@ class File implements FileType
         }
 
         if (!$valid) {
-            throw new InvalidArgumentException($this->lang->write($this->lang::MIME_TYPE));
+            throw new UploadFileException($this->lang->write($this->lang::MIME_TYPE));
         }
         return $this;
     }
@@ -126,9 +130,9 @@ class File implements FileType
      *
      * @return  int
      */
-    public function getSize()
+    public function getSize(): int
     {
-        return $this->size;
+        return (int) $this->size;
     }
 
     /**
@@ -163,6 +167,6 @@ class File implements FileType
      */
     public function toJson(): string
     {
-        return \json_encode($this->toArray);
+        return \json_encode($this->toArray());
     }
 }

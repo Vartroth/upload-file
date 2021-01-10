@@ -11,12 +11,19 @@ interface FileType
 
     public function __construct(array $FileData, LangString $lang);
 
-    public function toArray(): array;
-
-    public function toJson(): string;
-
-    public function getLang(): LangString;
+    public function validateType(array $typeList): self;
 
     public function setName(string $name);
 
+    public function getName(): string;
+
+    public function getType(): string;
+
+    public function getSize(): int;
+
+    public function getLang(): LangString;
+
+    public function toArray(): array;
+
+    public function toJson(): string;
 }
