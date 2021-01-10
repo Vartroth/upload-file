@@ -4,31 +4,10 @@ declare (strict_types = 1);
 
 namespace Vartroth\UploadFile\Entity\Types;
 
-use Vartroth\UploadFile\Entity\FileType;
-
 /**
  * [Description Image]
  */
-class Image implements FileType
+class Image
 {
-
-    public function __construct(array $FileData)
-    {
-
-    }
-
-    public function load()
-    {
-
-    }
-
-    public function toArray()
-    {
-
-    }
-
-    public function toJson()
-    {
-
-    }
+    //WIP Implement same file class for upload images and resize, validate, etc...
 }

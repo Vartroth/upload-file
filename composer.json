@@ -24,8 +24,18 @@
         "php": ">=7.1.0",
         "vartroth/functions-utils": "^1.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "php-parallel-lint/php-console-highlighter": "~0.5",
+        "php-parallel-lint/php-var-dump-check": "~0.4"
+    },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": [
+            "./vendor/bin/phpunit",
+            "./vendor/bin/parallel-lint --exclude vendor .",
+            "./vendor/bin/var-dump-check --exclude vendor ."
+        ],
         "server": "php -S 127.0.0.1:8080"
     }
 }
