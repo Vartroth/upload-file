@@ -23,6 +23,8 @@ interface FileType
 
     public function getLang(): LangString;
 
+    public function getKeepName(): bool;
+
     public function toArray(): array;
 
     public function toJson(): string;

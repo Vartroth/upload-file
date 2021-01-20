@@ -34,16 +34,30 @@ class UploadFileTest extends TestCase
         new File(array("error" => 1), new LangEs());
     }
 
-    public function testValidateInvalidType()
+    public function testValidateInvalidTypeGenerateNewException()
     {
         $this->expectException(\Vartroth\UploadFile\Exception\UploadFileException::class);
-        (new File($_FILES['foo'], new LangEs()))->validateType();
+        $file = new File($_FILES['foo'], new LangEs());
+        $file->validateType(["aplication/pdf"]);
+    }
+
+    public function testValidateTypeAndResultIsSameObject()
+    {
+        $file = new File($_FILES['foo'], new LangEs());
+        $this->assertEquals($file, $file->validateType(['text/plain']));
     }
 
     public function testGetName()
     {
         $file = new File($_FILES['foo'], new LangEs());
         $this->assertSame("foo.txt", $file->getName());
+    }
+
+    public function testSetName()
+    {
+        $file = new File($_FILES['foo'], new LangEs());
+        $file->setName("testname.txt");
+        $this->assertSame("testname.txt", $file->getName());
     }
 
     public function testGetSize()
@@ -56,6 +70,23 @@ class UploadFileTest extends TestCase
     {
         $file = new File($_FILES['foo'], new LangEs());
         $this->assertSame("text/plain", $file->getType());
+    }
+
+    public function testGetLang()
+    {
+        $lang = new LangEs();
+        $file = new File($_FILES['foo'], $lang);
+        $this->assertSame($lang, $file->getLang());
+    }
+
+    public function testGetKeepNameAndUniqueName()
+    {
+        $lang = new LangEs();
+        $file = new File($_FILES['foo'], $lang);
+        $file2 = new File($_FILES['foo'], $lang);
+        $file2->keepOriginalName();
+        $this->assertSame(false, $file->getKeepName());
+        $this->assertSame(true, $file2->getKeepName());
     }
 
     public function testToArray()

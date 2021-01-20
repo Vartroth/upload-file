@@ -27,15 +27,24 @@ class LocalFileSystem implements StorageSystemInterface
         $this->path = $path;
     }
 
+    /**
+     * process
+     *
+     * @param FileType $file
+     *
+     * @return FileType
+     */
     public function process(FileType $file): FileType
     {
 
         $ext = \explode('.', $file->getName());
         $file_name = str_replace("." . $ext[(sizeof($ext) - 1)], "", $file->getName());
 
-        $file->setName(SanitizerStringFile::exec($file_name) . "." . $ext[(sizeof($ext) - 1)]);
+        $file->setName(
+            ($file->getKeepName()) ? SanitizerStringFile::exec($file_name) : uniqid() . "." . $ext[(sizeof($ext) - 1)]
+        );
 
-        @move_uploaded_file(
+        $this->moveUploadedFile(
             (string) $file->toArray()['tmp_name'],
             $this->path . (string) $file->getName()
         );
@@ -45,5 +54,19 @@ class LocalFileSystem implements StorageSystemInterface
         }
 
         return $file;
+    }
+
+    /**
+     * moveUploadedFile is a function for Unit Test becouse there are
+     * a hard dependecy with 'move_uploaded_file'
+     *
+     * @param string $origin
+     * @param string $destination
+     *
+     * @return bool
+     */
+    private function moveUploadedFile(string $origin, string $destination): bool
+    {
+        return move_uploaded_file($origin, $destination);
     }
 }

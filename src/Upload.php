@@ -3,7 +3,6 @@ declare (strict_types = 1);
 
 namespace Vartroth\UploadFile;
 
-use Vartroth\UploadFile\Entity\File;
 use Vartroth\UploadFile\Entity\FileType;
 use Vartroth\UploadFile\Storage\StorageSystemInterface;
 

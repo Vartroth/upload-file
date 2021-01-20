@@ -48,6 +48,13 @@ class File implements FileType
     private $lang;
 
     /**
+     * Define if web keep the name or generate a unique name with unique_id function
+     *
+     * @var bool
+     */
+    private $keep_name;
+
+    /**
      * __construct
      *
      * @param array $FileData
@@ -69,6 +76,7 @@ class File implements FileType
         $this->size = $FileData['size'];
         $this->type = $FileData['type'];
         $this->tmp_name = $FileData['tmp_name'];
+        $this->keep_name = false;
 
         return $this;
     }
@@ -90,6 +98,17 @@ class File implements FileType
         if (!$valid) {
             throw new UploadFileException($this->lang->write($this->lang::MIME_TYPE));
         }
+        return $this;
+    }
+
+    /**
+     * keepOriginalName
+     *
+     * @return self
+     */
+    public function keepOriginalName(): self
+    {
+        $this->keep_name = true;
         return $this;
     }
 
@@ -143,6 +162,16 @@ class File implements FileType
     public function getLang(): LangString
     {
         return $this->lang;
+    }
+
+    /**
+     * Get define if web keep the name or generate a unique name with unique_id function
+     *
+     * @return  bool
+     */
+    public function getKeepName(): bool
+    {
+        return $this->keep_name;
     }
 
     /**

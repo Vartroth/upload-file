@@ -32,7 +32,7 @@
     },
     "scripts": {
         "test": [
-            "./vendor/bin/phpunit",
+            "./vendor/bin/phpunit --coverage-html .phpunit.cache/coverage",
             "./vendor/bin/parallel-lint --exclude vendor .",
             "./vendor/bin/var-dump-check --exclude vendor ."
         ],
