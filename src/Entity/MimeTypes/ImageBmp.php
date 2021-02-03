@@ -25,7 +25,7 @@ class ImageBmp implements ImageMimeType
             $origin = imagecreatefrombmp($image->getTmpName());
             $thumb = imagecreatetruecolor($this->widht, $this->height);
             imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->widht, $this->height, $image->getWidth(), $image->getHeight());
-            imagebmp($thumb, $image->getTmpName(), $this->quality);
+            imagebmp($thumb, $image->getTmpName());
             $image->setWidth = $this->widht;
             $image->setHeight = $this->height;
         }

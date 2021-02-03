@@ -28,7 +28,7 @@ class ImagePng implements ImageMimeType
             imagealphablending($thumb, false);
             imagesavealpha($thumb, true);
             imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->widht, $this->height, $image->getWidth(), $image->getHeight());
-            imagepng($thumb, $image->getTmpName(), null, $this->quality);
+            imagepng($thumb, $image->getTmpName(), null, (int) ($this->quality / 100));
             $image->setWidth = $this->widht;
             $image->setHeight = $this->height;
         }
