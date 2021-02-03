@@ -80,7 +80,7 @@ class Image implements FileType
     /**
      * The image height in px
      *
-     * @var height
+     * @var int
      */
     private $height;
 
@@ -272,19 +272,19 @@ class Image implements FileType
             throw new Exception("Gd Version not Found");
         }
 
-        $new_height = ((bool) $height) ? $height : (($width * 100 / (int) $this->width) * (int) $this->height);
+        $new_height = ((bool) $height) ? $height : ($this->height / ($this->width / $width));
 
         switch ($this->type) {
             case 'image/jpg':
             case 'image/jpeg':
             case 'image/pjpeg':
-                $image = (new ImageJpg($width, $new_height, self::DEFAULT_QUALITY))->resize($image);
+                $image = (new ImageJpg((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
                 break;
             case 'image/png':
-                $image = (new ImagePng($width, $new_height, self::DEFAULT_QUALITY))->resize($image);
+                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
                 break;
             case 'image/bmp':
-                $image = (new ImageBmp($width, $new_height, self::DEFAULT_QUALITY))->resize($image);
+                $image = (new ImageBmp((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
                 break;
         }
 

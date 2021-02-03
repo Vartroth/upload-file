@@ -9,7 +9,7 @@ use Vartroth\UploadFile\Entity\Types\Image;
 interface ImageMimeType
 {
 
-    public function __construct(float $widht, float $height, float $quality);
+    public function __construct(int $widht, int $height, int $quality);
 
     public function resize(Image $image): Image;
 }

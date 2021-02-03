@@ -12,7 +12,7 @@ class ImagePng implements ImageMimeType
     private $height;
     private $quality;
 
-    public function __construct(float $widht, float $height, float $quality)
+    public function __construct(int $widht, int $height, int $quality)
     {
         $this->widht = $widht;
         $this->height = $height;
