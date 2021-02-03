@@ -12,6 +12,10 @@ use Vartroth\UploadFile\Language\LangString;
 class File implements FileType
 {
 
+    const VALID_FILE_TYPES = [
+        'application/pdf',
+    ];
+
     /**
      * The file name
      *
@@ -88,7 +92,7 @@ class File implements FileType
      *
      * @return FileType
      */
-    public function validateType(array $typeList = ['application/pdf']): self
+    public function validateType(array $typeList = self::VALID_FILE_TYPES): self
     {
         $valid = false;
         foreach ($typeList as $type) {
