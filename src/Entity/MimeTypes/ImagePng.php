@@ -22,13 +22,13 @@ class ImagePng implements ImageMimeType
     public function resize(Image $image): Image
     {
         if ($image->getWidth() > $this->widht) {
-            $origin = @imagecreatefromjpeg($image->getTmpName());
+            $origin = @imagecreatefrompng($image->getTmpName());
             $thumb = imagecreatetruecolor($this->widht, $this->height);
             imagecolortransparent($thumb, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
             imagealphablending($thumb, false);
             imagesavealpha($thumb, true);
             imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->widht, $this->height, $image->getWidth(), $image->getHeight());
-            imagepng($thumb, $image->getTmpName(), null, (int) ($this->quality / 100));
+            imagepng($thumb, $image->getTmpName(), (int) ($this->quality / 100));
             $image->setWidth = $this->widht;
             $image->setHeight = $this->height;
         }
