@@ -38,10 +38,9 @@ class LocalFileSystem implements StorageSystemInterface
     {
 
         $ext = \explode('.', $file->getName());
-        $file_name = str_replace("." . $ext[(sizeof($ext) - 1)], "", $file->getName());
 
         $file->setName(
-            ($file->getKeepName()) ? SanitizerStringFile::exec($file_name) : uniqid() . "." . $ext[(sizeof($ext) - 1)]
+            ($file->getKeepName()) ? SanitizerStringFile::exec($file->getName()) : uniqid() . "." . $ext[(sizeof($ext) - 1)]
         );
 
         $this->moveUploadedFile(

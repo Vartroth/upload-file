@@ -22,7 +22,7 @@
     },
     "require": {
         "php": ">=7.1.0",
-        "vartroth/functions-utils": "^1.0"
+        "vartroth/functions-utils": "^1.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
