@@ -19,7 +19,7 @@ class Image implements FileType
 
     const IMAGE_SIZE_WIDTH = 0;
     const IMAGE_SIZE_HEIGHT = 1;
-    const DEFAULT_QUALITY = 100;
+    const DEFAULT_QUALITY = 90;
     const VALID_MIME_TYPES = [
         'image/jpg',
         'image/jpeg',
