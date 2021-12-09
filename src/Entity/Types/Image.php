@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Vartroth\UploadFile\Entity\FileType;
 use Vartroth\UploadFile\Entity\GdVersion;
 use Vartroth\UploadFile\Entity\MimeTypes\ImageBmp;
+use Vartroth\UploadFile\Entity\MimeTypes\ImageGif;
 use Vartroth\UploadFile\Entity\MimeTypes\ImageJpg;
 use Vartroth\UploadFile\Entity\MimeTypes\ImagePng;
 use Vartroth\UploadFile\Exception\UploadFileException;
@@ -26,6 +27,7 @@ class Image implements FileType
         'image/pjpeg',
         'image/bmp',
         'image/png',
+        'image/gif',
     ];
 
     /**
@@ -286,6 +288,8 @@ class Image implements FileType
             case 'image/bmp':
                 $image = (new ImageBmp((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
                 break;
+            case 'image/gif':
+                $image = (new ImageGif((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
         }
 
         return $image;
