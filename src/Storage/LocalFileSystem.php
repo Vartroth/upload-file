@@ -7,7 +7,6 @@ namespace Vartroth\UploadFile\Storage;
 use InvalidArgumentException;
 use Vartroth\UploadFile\Entity\FileType;
 use Vartroth\UploadFile\Exception\UploadFileException;
-use Vartroth\Utils\DataConversion\Strings\SanitizerStringFile;
 
 class LocalFileSystem implements StorageSystemInterface
 {
@@ -40,7 +39,7 @@ class LocalFileSystem implements StorageSystemInterface
         $ext = \explode('.', $file->getName());
 
         $file->setName(
-            ($file->getKeepName()) ? SanitizerStringFile::exec($file->getName()) : uniqid() . "." . $ext[(sizeof($ext) - 1)]
+            ($file->getKeepName()) ? $file->getName() : uniqid() . "." . $ext[(sizeof($ext) - 1)]
         );
 
         $this->moveUploadedFile(
