@@ -3,35 +3,40 @@
 namespace Vartroth\UploadFile;
 
 use PHPUnit\Framework\TestCase;
-use Vartroth\UploadFile\Entity\Types\File;
 use Vartroth\UploadFile\Language\LangEs;
+use Vartroth\UploadFile\Entity\Types\File;
 
 class UploadFileTest extends TestCase
 {
 
+    /**
+     * @var string
+     */
+    protected $assetsDirectory;
+
     protected function setUp(): void
     {
         $this->assetsDirectory = dirname(__FILE__) . '/assets';
-        $_FILES['foo'] = [
-            'name' => 'foo.txt',
-            'size' => 222222,
-            'type' => 'text/plain',
+        $_FILES['foo']         = [
+            'name'     => 'foo.txt',
+            'size'     => 222222,
+            'type'     => 'text/plain',
             'tmp_name' => $this->assetsDirectory . '/foo.txt',
-            'error' => 0,
+            'error'    => 0,
         ];
     }
 
     public function testConstructionWithInvalidArray()
     {
         $this->expectException(\InvalidArgumentException::class);
-        new File(array(), new LangEs());
+        new File([], new LangEs());
 
     }
 
     public function testConstructionWithUploadError()
     {
         $this->expectException(\Vartroth\UploadFile\Exception\UploadFileException::class);
-        new File(array("error" => 1), new LangEs());
+        new File(["error" => 1], new LangEs());
     }
 
     public function testValidateInvalidTypeGenerateNewException()
@@ -81,8 +86,8 @@ class UploadFileTest extends TestCase
 
     public function testGetKeepNameAndUniqueName()
     {
-        $lang = new LangEs();
-        $file = new File($_FILES['foo'], $lang);
+        $lang  = new LangEs();
+        $file  = new File($_FILES['foo'], $lang);
         $file2 = new File($_FILES['foo'], $lang);
         $file2->keepOriginalName();
         $this->assertSame(false, $file->getKeepName());
@@ -92,9 +97,9 @@ class UploadFileTest extends TestCase
     public function testToArray()
     {
         $expected = [
-            'name' => 'foo.txt',
-            'type' => 'text/plain',
-            'size' => 222222,
+            'name'     => 'foo.txt',
+            'type'     => 'text/plain',
+            'size'     => 222222,
             'tmp_name' => $this->assetsDirectory . '/foo.txt',
         ];
         $file = new File($_FILES['foo'], new LangEs());

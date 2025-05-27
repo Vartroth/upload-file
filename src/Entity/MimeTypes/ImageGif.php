@@ -8,29 +8,25 @@ use Vartroth\UploadFile\Entity\Types\Image;
 class ImageGif implements ImageMimeType
 {
 
-    private $widht;
-    private $height;
-    private $quality;
-
-    public function __construct(int $widht, int $height, int $quality)
-    {
-        $this->widht = $widht;
-        $this->height = $height;
-        $this->quality = $quality;
+    public function __construct(
+        private int $width,
+        private int $height,
+        private int $quality
+    ) {
     }
 
     public function resize(Image $image): Image
     {
-        if ($image->getWidth() > $this->widht) {
+        if ($image->getWidth() > $this->width) {
             $origin = @imagecreatefrompng($image->getTmpName());
-            $thumb = imagecreatetruecolor($this->widht, $this->height);
+            $thumb  = imagecreatetruecolor($this->width, $this->height);
             imagecolortransparent($thumb, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
             imagealphablending($thumb, false);
             imagesavealpha($thumb, true);
-            imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->widht, $this->height, $image->getWidth(), $image->getHeight());
+            imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->width, $this->height, $image->getWidth(), $image->getHeight());
             imagegif($thumb, $image->getTmpName(), (int) (($this->quality / 10) - 1));
-            $image->setWidth = $this->widht;
-            $image->setHeight = $this->height;
+            $image->setWidth($this->width);
+            $image->setHeight($this->height);
         }
         return $image;
     }

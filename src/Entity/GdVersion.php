@@ -15,8 +15,8 @@ class GdVersion
         $gd_version = null;
         if ($gd_version == null) {
             if (function_exists('gd_info')) {
-                $gd = gd_info();
-                $gd = $gd["GD Version"];
+                $gd    = gd_info();
+                $gd    = $gd["GD Version"];
                 $regex = "/([\d\.]+)/i";
             } else {
                 ob_start();

@@ -6,8 +6,8 @@ namespace Vartroth\UploadFile\Language;
 
 abstract class LangString
 {
-    public const UPLOAD_ERROR = "error";
-    public const MIME_TYPE = "type";
+    public const UPLOAD_ERROR   = "error";
+    public const MIME_TYPE      = "type";
     public const PATH_NOT_EXIST = "path";
 
     protected $traduction = "";
@@ -23,7 +23,7 @@ abstract class LangString
      */
     public function write($key): string
     {
-        if (!isset($this->traduction[$key])) {
+        if (! isset($this->traduction[$key])) {
             throw new \InvalidArgumentException("Traduction string not found");
         }
         return $this->traduction[$key];

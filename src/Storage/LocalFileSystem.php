@@ -20,7 +20,7 @@ class LocalFileSystem implements StorageSystemInterface
      */
     public function __construct(string $path = __DIR__ . "../../")
     {
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             throw new InvalidArgumentException();
         }
         $this->path = $path;
@@ -47,7 +47,7 @@ class LocalFileSystem implements StorageSystemInterface
             $this->path . (string) $file->getName()
         );
 
-        if (!is_file($this->path . (string) $file->getName())) {
+        if (! is_file($this->path . (string) $file->getName())) {
             throw new UploadFileException($file->getLang()->write($file->getLang()::UPLOAD_ERROR));
         }
 

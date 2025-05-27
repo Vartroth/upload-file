@@ -15,7 +15,7 @@ class Upload
         FileType $filetype,
         StorageSystemInterface $storageSystem
     ) {
-        $this->file = $filetype;
+        $this->file          = $filetype;
         $this->storageSystem = $storageSystem;
     }
 

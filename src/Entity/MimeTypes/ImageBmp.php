@@ -8,26 +8,22 @@ use Vartroth\UploadFile\Entity\Types\Image;
 class ImageBmp implements ImageMimeType
 {
 
-    private $widht;
-    private $height;
-    private $quality;
-
-    public function __construct(int $widht, int $height, int $quality)
-    {
-        $this->widht = $widht;
-        $this->height = $height;
-        $this->quality = $quality;
+    public function __construct(
+        private int $width,
+        private int $height,
+        private int $quality
+    ) {
     }
 
     public function resize(Image $image): Image
     {
-        if ($image->getWidth() > $this->widht) {
+        if ($image->getWidth() > $this->width) {
             $origin = imagecreatefrombmp($image->getTmpName());
-            $thumb = imagecreatetruecolor($this->widht, $this->height);
-            imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->widht, $this->height, $image->getWidth(), $image->getHeight());
+            $thumb  = imagecreatetruecolor($this->width, $this->height);
+            imagecopyresampled($thumb, $origin, 0, 0, 0, 0, $this->width, $this->height, $image->getWidth(), $image->getHeight());
             imagebmp($thumb, $image->getTmpName());
-            $image->setWidth = $this->widht;
-            $image->setHeight = $this->height;
+            $image->setWidth($this->width);
+            $image->setHeight($this->height);
         }
         return $image;
     }

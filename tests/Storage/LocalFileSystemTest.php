@@ -5,15 +5,20 @@ use Vartroth\UploadFile\Storage\LocalFileSystem;
 
 class LocalFileSystemTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    protected $assetsDirectory;
+
     protected function setUp(): void
     {
         $this->assetsDirectory = dirname(__FILE__) . '/assets';
-        $_FILES['foo'] = [
-            'name' => 'file name !s invalid.txt',
-            'size' => 1,
-            'type' => 'text/plain',
+        $_FILES['foo']         = [
+            'name'     => 'file name !s invalid.txt',
+            'size'     => 1,
+            'type'     => 'text/plain',
             'tmp_name' => $this->assetsDirectory . '/file name !s invalid.txt',
-            'error' => 0,
+            'error'    => 0,
         ];
     }
 

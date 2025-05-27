@@ -18,16 +18,18 @@ use Vartroth\UploadFile\Language\LangString;
 class Image implements FileType
 {
 
-    const IMAGE_SIZE_WIDTH = 0;
+    const IMAGE_SIZE_WIDTH  = 0;
     const IMAGE_SIZE_HEIGHT = 1;
-    const DEFAULT_QUALITY = 90;
-    const VALID_MIME_TYPES = [
+    const DEFAULT_QUALITY   = 90;
+    const VALID_MIME_TYPES  = [
         'image/jpg',
         'image/jpeg',
         'image/pjpeg',
         'image/bmp',
         'image/png',
         'image/gif',
+        'image/webp',
+        'image/avif',
     ];
 
     /**
@@ -96,23 +98,23 @@ class Image implements FileType
     {
         $this->lang = $lang;
 
-        if (!isset($FileData) || !isset($FileData['error'])) {
+        if (! isset($FileData) || ! isset($FileData['error'])) {
             throw new InvalidArgumentException($this->lang->write($this->lang::UPLOAD_ERROR));
         }
 
-        if ($FileData['error'] || !is_file($FileData['tmp_name'])) {
+        if ($FileData['error'] || ! is_file($FileData['tmp_name'])) {
             throw new UploadFileException($this->lang->write($this->lang::UPLOAD_ERROR));
         }
 
         $info = \getimagesize($FileData['tmp_name']);
 
-        $this->name = $FileData['name'];
-        $this->size = $FileData['size'];
-        $this->type = $FileData['type'];
-        $this->tmp_name = $FileData['tmp_name'];
+        $this->name      = $FileData['name'];
+        $this->size      = $FileData['size'];
+        $this->type      = $FileData['type'];
+        $this->tmp_name  = $FileData['tmp_name'];
         $this->keep_name = false;
-        $this->width = (int) $info[self::IMAGE_SIZE_WIDTH];
-        $this->height = (int) $info[self::IMAGE_SIZE_HEIGHT];
+        $this->width     = (int) $info[self::IMAGE_SIZE_WIDTH];
+        $this->height    = (int) $info[self::IMAGE_SIZE_HEIGHT];
 
         return $this;
     }
@@ -192,7 +194,7 @@ class Image implements FileType
     /**
      * Get the image height in px
      *
-     * @return  height
+     * @return  int
      */
     public function getHeight()
     {
@@ -200,9 +202,9 @@ class Image implements FileType
     }
 
     /**
-     * Get temp upload File
+     * Get the temporary file name
      *
-     * @return  strint
+     * @return string
      */
     public function getTmpName()
     {
@@ -217,12 +219,12 @@ class Image implements FileType
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
-            'type' => $this->type,
-            'size' => $this->size,
+            'name'     => $this->name,
+            'type'     => $this->type,
+            'size'     => $this->size,
             'tmp_name' => $this->tmp_name,
-            'widht' => $this->width,
-            'height' => $this->height,
+            'width'    => $this->width,
+            'height'   => $this->height,
         ];
     }
 
@@ -250,7 +252,7 @@ class Image implements FileType
             $valid = ($type == $this->type) ? true : $valid;
         }
 
-        if (!$valid) {
+        if (! $valid) {
             throw new UploadFileException($this->lang->write($this->lang::MIME_TYPE));
         }
         return $this;
@@ -270,7 +272,7 @@ class Image implements FileType
 
         $this->validateType();
 
-        if (!(new GdVersion())()) {
+        if (! (new GdVersion())()) {
             throw new Exception("Gd Version not Found");
         }
 
@@ -290,6 +292,15 @@ class Image implements FileType
                 break;
             case 'image/gif':
                 $image = (new ImageGif((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
+                break;
+            case 'image/webp':
+                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
+                break;
+            case 'image/avif':
+                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
+                break;
+            default:
+                throw new UploadFileException($this->lang->write($this->lang::MIME_TYPE));
         }
 
         return $image;
