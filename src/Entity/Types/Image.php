@@ -4,14 +4,9 @@ declare (strict_types = 1);
 
 namespace Vartroth\UploadFile\Entity\Types;
 
-use Exception;
 use InvalidArgumentException;
 use Vartroth\UploadFile\Entity\FileType;
-use Vartroth\UploadFile\Entity\GdVersion;
-use Vartroth\UploadFile\Entity\MimeTypes\ImageBmp;
-use Vartroth\UploadFile\Entity\MimeTypes\ImageGif;
-use Vartroth\UploadFile\Entity\MimeTypes\ImageJpg;
-use Vartroth\UploadFile\Entity\MimeTypes\ImagePng;
+use Vartroth\UploadFile\Entity\RasterImage;
 use Vartroth\UploadFile\Exception\UploadFileException;
 use Vartroth\UploadFile\Language\LangString;
 
@@ -42,7 +37,7 @@ class Image implements FileType
     /**
      * Temp upload File
      *
-     * @var strint
+     * @var string
      */
     private $tmp_name;
 
@@ -106,7 +101,10 @@ class Image implements FileType
             throw new UploadFileException($this->lang->write($this->lang::UPLOAD_ERROR));
         }
 
-        $info = \getimagesize($FileData['tmp_name']);
+        $info = @\getimagesize($FileData['tmp_name']);
+        if ($info === false) {
+            throw new UploadFileException('Invalid raster image');
+        }
 
         $this->name      = $FileData['name'];
         $this->size      = $FileData['size'];
@@ -268,42 +266,63 @@ class Image implements FileType
      */
     public function resizeImage(int $width, int $height = 0): self
     {
-        $image = $this;
-
-        $this->validateType();
-
-        if (! (new GdVersion())()) {
-            throw new Exception("Gd Version not Found");
+        if ($width <= 0 || $height < 0) {
+            throw new InvalidArgumentException('Width must be positive and height must be non-negative');
         }
 
-        $new_height = ((bool) $height) ? $height : ($this->height / ($this->width / $width));
-
-        switch ($this->type) {
-            case 'image/jpg':
-            case 'image/jpeg':
-            case 'image/pjpeg':
-                $image = (new ImageJpg((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            case 'image/png':
-                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            case 'image/bmp':
-                $image = (new ImageBmp((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            case 'image/gif':
-                $image = (new ImageGif((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            case 'image/webp':
-                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            case 'image/avif':
-                $image = (new ImagePng((int) $width, (int) $new_height, self::DEFAULT_QUALITY))->resize($image);
-                break;
-            default:
-                throw new UploadFileException($this->lang->write($this->lang::MIME_TYPE));
+        $info = @getimagesize($this->tmp_name);
+        if ($info === false) {
+            throw new UploadFileException('Invalid raster image');
+        }
+        if ($width >= $info[0]) {
+            return $this;
         }
 
-        return $image;
+        $height = $height ?: max(1, (int) ($info[1] * $width / $info[0]));
+        return $this->transform($info['mime'], $width, $height, self::DEFAULT_QUALITY, false);
+    }
+
+    public function convertTo(string $targetMime, int $quality = self::DEFAULT_QUALITY): self
+    {
+        if (! in_array($targetMime, ['image/webp', 'image/jpeg', 'image/png'], true)) {
+            throw new InvalidArgumentException('Target MIME must be image/webp, image/jpeg or image/png');
+        }
+        if ($quality < 0 || $quality > 100) {
+            throw new InvalidArgumentException('Quality must be between 0 and 100');
+        }
+
+        $info = @getimagesize($this->tmp_name);
+        if ($info === false) {
+            throw new UploadFileException('Invalid raster image');
+        }
+        return $this->transform($targetMime, $info[0], $info[1], $quality, true);
+    }
+
+    private function transform(string $mime, int $width, int $height, int $quality, bool $rename): self
+    {
+        $output = RasterImage::encode($this->tmp_name, $mime, $width, $height, $quality);
+        $original = @file_get_contents($this->tmp_name);
+        if ($original === false) {
+            throw new UploadFileException('Unable to read image');
+        }
+
+        // Keep the HTTP upload path registered for move_uploaded_file().
+        if (@file_put_contents($this->tmp_name, $output) !== strlen($output)) {
+            @file_put_contents($this->tmp_name, $original);
+            throw new UploadFileException('Unable to write transformed image');
+        }
+
+        $this->type = $mime;
+        $this->size = strlen($output);
+        $this->width = $width;
+        $this->height = $height;
+        if ($rename) {
+            $extensions = ['image/webp' => 'webp', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
+            $extension = pathinfo($this->name, PATHINFO_EXTENSION);
+            $stem = $extension === '' ? $this->name : substr($this->name, 0, -strlen($extension) - 1);
+            $this->name = $stem . '.' . $extensions[$mime];
+        }
+        return $this;
     }
 
     /**

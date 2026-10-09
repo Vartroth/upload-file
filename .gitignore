@@ -1,4 +1,7 @@
 .idea/
+.serena/
+.atl/
+.codegraph/
 .vsconfig/
 /vendor/
 /build/

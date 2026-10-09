@@ -2,6 +2,7 @@
 
 namespace Vartroth\UploadFile;
 
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 use Vartroth\UploadFile\Language\LangEs;
 use Vartroth\UploadFile\Entity\Types\File;
@@ -107,9 +108,7 @@ class UploadFileTest extends TestCase
         return $expected;
     }
 
-    /**
-     * @depends testToArray
-     */
+    #[Depends('testToArray')]
     public function testToJson(array $expected)
     {
         $file = new File($_FILES['foo'], new LangEs());
