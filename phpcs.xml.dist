@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="DebugCalls">
+    <description>Prevent accidental debug function calls.</description>
+    <file>.</file>
+    <arg name="extensions" value="php,php3,php4,php5,phtml"/>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/index.php</exclude-pattern>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="var_dump" value="null"/>
+                <element key="print_r" value="null"/>
+                <element key="var_export" value="null"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>
